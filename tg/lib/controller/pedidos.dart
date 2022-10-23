@@ -3,7 +3,7 @@ import 'package:tg/component/var_global.dart' as var_global;
 import 'package:tg/model/pedidos.dart';
 
 reordenarPedido() {
-  var_global.pedidos = [
+  var_global.pedidosFila = [
     Pedidos(
       cpf: '44452014745',
       produtos: [
@@ -13,7 +13,7 @@ reordenarPedido() {
     ),
   ];
 
-  var_global.timerPedidos = periodo(const Duration(seconds: 10), (cycle) {
-    // for (var element in var_global.pedidos) {}
-  });
+  // var_global.timerPedidos = periodo(const Duration(seconds: 10), (cycle) {
+  //   // for (var element in var_global.pedidos) {}
+  // });
 }
