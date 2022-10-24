@@ -9,4 +9,6 @@ import 'package:tg/model/pedidos.dart';
 
 Completer<bool>? timerPedidos;
 List<Pedidos> pedidosFila = [];
-TextStyle tamanhoPadraoTexto = TextStyle(fontSize: 25);
+TextStyle tamanhoPadraoTexto = TextStyle(
+  fontSize: 15,
+);

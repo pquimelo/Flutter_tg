@@ -8,7 +8,27 @@ class PedidosProvider extends ChangeNotifier {
   PedidosProvider.internal();
 
   List get listaPedidosProvider => var_global.pedidosFila;
-  atualizarLista(Pedidos objeto) {
+
+  reordenarPedido() {
+    var_global.pedidosFila = [
+      Pedidos(
+        cpf: '44452014745',
+        idPedido: 5,
+        produtos: [
+          Produtos(idProduto: 2, nomeProduto: 'Lasanha', quantidadePedida: 15),
+          Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 2),
+        ],
+      ),
+      Pedidos(
+        cpf: '44452014745',
+        idPedido: 2,
+        produtos: [
+          Produtos(idProduto: 2, nomeProduto: 'Lasanha', quantidadePedida: 1),
+          Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 3),
+        ],
+      ),
+    ];
+
     notifyListeners();
   }
 }
