@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tg/View/Pedidos/corpo_pedidos.dart';
+import 'package:tg/View/lista_reordenada/lista_reordenada.dart';
 import 'package:tg/component/alt_larg.dart';
 import 'package:tg/component/var_global.dart' as var_global;
 import 'package:tg/controller/pedidos.dart';
@@ -132,7 +133,7 @@ class _HomeState extends State<Home> {
                       child: ListView.builder(
                         itemCount: context.watch<PedidosProvider>().listaPedidosProvider.length,
                         itemBuilder: (context, index) {
-                          return Column(children: corpoPedidos(context, context.watch<PedidosProvider>().listaPedidosProvider[index]));
+                          return Column(children: corpoReordenado(context, context.watch<PedidosProvider>().listaPedidosProvider[index]));
                         },
                       ),
                     ),

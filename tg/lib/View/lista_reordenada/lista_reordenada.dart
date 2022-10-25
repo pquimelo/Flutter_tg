@@ -4,7 +4,7 @@ import 'package:tg/component/alt_larg.dart';
 import 'package:tg/model/pedidos.dart';
 import 'package:tg/component/var_global.dart' as var_global;
 
-List<Widget> corpoPedidos(BuildContext context, Pedidos objeto) {
+List<Widget> corpoReordenado(BuildContext context, Pedidos objeto) {
   AltuLarg _tamanho = AltuLarg();
   List<Widget> a = [];
 
@@ -33,6 +33,14 @@ List<Widget> corpoPedidos(BuildContext context, Pedidos objeto) {
                     width: _tamanho.larguraTela(context) * 0.23,
                     height: _tamanho.alturaTela(context) * 0.05,
                     child: Text("Produto: ${element.nomeProduto}", style: var_global.tamanhoPadraoTexto),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  height: _tamanho.alturaTela(context) * 0.09,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Finalizar', style: var_global.tamanhoPadraoTexto),
                   ),
                 ),
               ],

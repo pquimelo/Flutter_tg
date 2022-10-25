@@ -13,9 +13,14 @@ reordenarPedidos() {
     print(url);
     var response = await http.get(url);
     if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      var itemCount = jsonResponse['totalItems'];
-      print('Number of books about http: $itemCount.');
+      var jsonResponse = convert.jsonDecode(response.body);
+      Pedidos dadosApi = Pedidos(
+        cpf: jsonResponse['user']['cpf'],
+        idPedido: jsonResponse['id_order'],
+      );
+      print('Dados Api ${dadosApi.cpf}');
+
+      // print(' aaaaaaa:  ${jsonResponse}');
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
