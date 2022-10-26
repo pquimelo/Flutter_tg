@@ -133,7 +133,9 @@ class _HomeState extends State<Home> {
                       child: ListView.builder(
                         itemCount: context.watch<PedidosProvider>().listaPedidosProvider.length,
                         itemBuilder: (context, index) {
-                          return Column(children: corpoReordenado(context, context.watch<PedidosProvider>().listaPedidosProvider[index]));
+                          return Column(
+                            children: corpoReordenado(context, context.watch<PedidosProvider>().listaPedidosProvider[index]),
+                          );
                         },
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tg/component/alt_larg.dart';
 import 'package:tg/model/pedidos.dart';
 import 'package:tg/component/var_global.dart' as var_global;
+import 'package:tg/provider/pedidos_provider.dart';
 
 List<Widget> corpoReordenado(BuildContext context, Pedidos objeto) {
   AltuLarg _tamanho = AltuLarg();
@@ -39,7 +40,10 @@ List<Widget> corpoReordenado(BuildContext context, Pedidos objeto) {
                   padding: const EdgeInsets.only(bottom: 5),
                   height: _tamanho.alturaTela(context) * 0.09,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      // Passar o objeto interiro
+                      await PedidosProvider().finalizarProduto(objeto);
+                    },
                     child: Text('Finalizar', style: var_global.tamanhoPadraoTexto),
                   ),
                 ),

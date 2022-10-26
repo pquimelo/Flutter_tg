@@ -10,6 +10,7 @@ class PedidosProvider extends ChangeNotifier {
   List get listaPedidosProvider => var_global.pedidosFila;
 
   reordenarPedido() {
+    // listaPedidosProvider;
     var_global.pedidosFila = [
       Pedidos(
         cpf: '44452014745',
@@ -29,6 +30,15 @@ class PedidosProvider extends ChangeNotifier {
       ),
     ];
 
+    notifyListeners();
+  }
+
+  finalizarProduto(Pedidos objeto) {
+    var index = var_global.pedidosFila.indexOf(objeto);
+    for (var finalizar in objeto.produtos!) {
+      finalizar.statusProdutos = 1;
+    }
+    var_global.pedidosFila.removeAt(index);
     notifyListeners();
   }
 }
