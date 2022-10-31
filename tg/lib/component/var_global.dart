@@ -12,3 +12,4 @@ List<Pedidos> pedidosFila = [];
 TextStyle tamanhoPadraoTexto = TextStyle(
   fontSize: 15,
 );
+List<Pedidos> listaComIndiceCerto = [];

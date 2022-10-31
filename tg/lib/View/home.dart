@@ -40,7 +40,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _reordenarPedidos();
+          // _reordenarPedidos();
+          PedidosProvider().criarCards();
         },
       ),
       backgroundColor: const Color.fromARGB(255, 247, 247, 247),
@@ -131,10 +132,10 @@ class _HomeState extends State<Home> {
                       width: _tamanho.larguraTela(context) * 0.4,
                       height: _tamanho.alturaTela(context) * 0.8,
                       child: ListView.builder(
-                        itemCount: context.watch<PedidosProvider>().listaPedidosProvider.length,
+                        itemCount: context.watch<PedidosProvider>().listaComIndiceCerto.length,
                         itemBuilder: (context, index) {
                           return Column(
-                            children: corpoReordenado(context, context.watch<PedidosProvider>().listaPedidosProvider[index]),
+                            children: corpoReordenado(context, context.watch<PedidosProvider>().listaComIndiceCerto[index]),
                           );
                         },
                       ),

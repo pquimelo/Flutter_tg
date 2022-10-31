@@ -8,6 +8,7 @@ class PedidosProvider extends ChangeNotifier {
   PedidosProvider.internal();
 
   List get listaPedidosProvider => var_global.pedidosFila;
+  List get listaComIndiceCerto => var_global.listaComIndiceCerto;
 
   reordenarPedido() {
     // listaPedidosProvider;
@@ -24,7 +25,7 @@ class PedidosProvider extends ChangeNotifier {
         cpf: '44452014745',
         idPedido: 2,
         produtos: [
-          Produtos(idProduto: 2, nomeProduto: 'Lasanha', quantidadePedida: 1),
+          Produtos(idProduto: 2, nomeProduto: 'strognoff', quantidadePedida: 1),
           Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 3),
         ],
       ),
@@ -33,12 +34,35 @@ class PedidosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  finalizarProduto(Pedidos objeto) {
-    var index = var_global.pedidosFila.indexOf(objeto);
-    for (var finalizar in objeto.produtos!) {
-      finalizar.statusProdutos = 1;
+  criarCards() {
+    for (var element in var_global.pedidosFila) {
+      for (var produtos in element.produtos!) {
+        for (int i = 0; i < produtos.quantidadePedida!; i++) {
+          var_global.listaComIndiceCerto.add(
+            Pedidos(
+              cpf: element.cpf,
+              idPedido: element.idPedido,
+              produtos: [
+                Produtos(
+                  idProduto: produtos.idProduto,
+                  nomeProduto: produtos.nomeProduto,
+                  // quantidadePedida: produtos.quantidadePedida
+                  tempoPreparo: produtos.tempoPreparo,
+                  statusProdutos: 0,
+                ),
+              ],
+            ),
+          );
+        }
+      }
     }
-    var_global.pedidosFila.removeAt(index);
+    notifyListeners();
+  }
+
+  finalizarProduto(Pedidos objeto) {
+    objeto.produtos![0].statusProdutos = 1;
+
+    var_global.listaComIndiceCerto.remove(objeto);
     notifyListeners();
   }
 }
