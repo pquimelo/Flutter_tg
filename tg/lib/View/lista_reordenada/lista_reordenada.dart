@@ -15,16 +15,16 @@ List<Widget> corpoReordenado(BuildContext context, Pedidos objeto) {
       // color: Color.fromARGB(0, 77, 77, 77),
       child: Column(
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Container(
-                  child: Text("Nº pedido: ${objeto.idPedido}"),
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.only(left: 10),
+          //       child: Container(
+          //         child: Text("Nº pedido: ${objeto.idPedido}"),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Row(
             children: [
               Padding(
