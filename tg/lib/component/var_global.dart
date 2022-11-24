@@ -14,3 +14,5 @@ TextStyle tamanhoPadraoTexto = TextStyle(
   fontSize: 15,
 );
 List<Pedidos> listaComIndiceCerto = [];
+List<Widget> a = [];
+List<Pedidos> listaIndice2 = [];

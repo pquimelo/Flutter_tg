@@ -6,7 +6,7 @@ import 'package:tg/component/alt_larg.dart';
 import 'package:tg/component/var_global.dart' as var_global;
 import 'package:tg/controller/pedidos.dart';
 // import 'package:tg/controller/pedidos.dart';
-import 'package:tg/provider/pedidos_provider.dart';
+import 'package:tg/provider/Pedidos_provider.dart';
 // import 'package:tg/provider/lista_pedido.dart';
 
 class Home extends StatefulWidget {
@@ -16,15 +16,14 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-/*TODO : ADD O PROVIDER E COLOCAR A LISTA DE PEDIDO LA, PARA EXIBIR NA TELA List.generate(context.watch<MotivoParadaProvider>().listaMotivoProvider.length, (index) {
-                  return corpoMotivoParada(context, context.watch<MotivoParadaProvider>().listaMotivoProvider[index]);
-*/
+
 AltuLarg _tamanho = AltuLarg();
 
 class _HomeState extends State<Home> {
   @override
   void initState() {
     PedidosProvider().reordenarPedido();
+    
 
     super.initState();
   }
@@ -111,11 +110,11 @@ class _HomeState extends State<Home> {
                     child: ListView.builder(
                       itemCount: context.watch<PedidosProvider>().listaPedidosProvider.length,
                       itemBuilder: (context, index) {
-                        return Column(
-                            children: corpoPedidos(
+                        return 
+                             corpoPedidos(
                           context,
                           context.watch<PedidosProvider>().listaPedidosProvider[index],
-                        ));
+                        );
                       },
                     ),
                   ),
@@ -132,11 +131,11 @@ class _HomeState extends State<Home> {
                       width: _tamanho.larguraTela(context) * 0.4,
                       height: _tamanho.alturaTela(context) * 0.8,
                       child: ListView.builder(
-                        itemCount: context.watch<PedidosProvider>().listaComIndiceCerto.length,
+                        itemCount: context.watch<PedidosProvider>().listaIndice2.length,
                         itemBuilder: (context, index) {
-                          return Column(
-                            children: corpoReordenado(context, context.watch<PedidosProvider>().listaComIndiceCerto[index]),
-                          );
+                          
+                          return  corpoReordenado(context, context.watch<PedidosProvider>().listaIndice2[index],index);
+                          
                         },
                       ),
                     ),

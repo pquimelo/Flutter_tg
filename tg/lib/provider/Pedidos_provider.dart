@@ -10,6 +10,8 @@ class PedidosProvider extends ChangeNotifier {
   List get listaPedidosProvider => var_global.pedidosFila;
   List get listaComIndiceCerto => var_global.listaComIndiceCerto;
   List get listaProdutos =>var_global.listaProdutos;
+  List get a => var_global.a;
+  List get listaIndice2 => var_global.listaIndice2;
 
   reordenarPedido() {
     // listaPedidosProvider;
@@ -60,11 +62,12 @@ class PedidosProvider extends ChangeNotifier {
     notifyListeners();
   }
   criarCardsProdutos() {
-  for (var produtos in var_global.listaProdutos) {
-        for (int i = 0; i < produtos.quantidadePedida!; i++) {
-          var_global.listaComIndiceCerto.add(
+    var_global.listaIndice2 = [];
+  for (var element in var_global.listaComIndiceCerto) {
+        for (var produtos in element.produtos!) {
+          for (int i = 0; i < produtos.quantidadePedida!; i++) {
+          var_global.listaIndice2.add(
             Pedidos(
-              
               produtos: [
                 Produtos(
                   idProduto: produtos.idProduto,
@@ -76,10 +79,10 @@ class PedidosProvider extends ChangeNotifier {
               ],
             ),
           );
-        }
-         notifyListeners();
+        }}
+         
     }
-   
+   notifyListeners();
   }
 
   finalizarProduto(Pedidos objeto) {
@@ -87,5 +90,8 @@ class PedidosProvider extends ChangeNotifier {
 
     var_global.listaComIndiceCerto.remove(objeto);
     notifyListeners();
+  }
+  atualizar(){
+notifyListeners();
   }
 }

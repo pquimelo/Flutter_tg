@@ -5,14 +5,10 @@ import 'package:tg/component/alt_larg.dart';
 import 'package:tg/component/dialog.dart';
 import 'package:tg/model/pedidos.dart';
 import 'package:tg/component/var_global.dart' as var_global;
+AltuLarg _tamanho = AltuLarg();
+Widget corpoPedidos(BuildContext context, Pedidos objeto) {
 
-List<Widget> corpoPedidos(BuildContext context, Pedidos objeto) {
-  AltuLarg _tamanho = AltuLarg();
-  List<Widget> a = [];
-
-  
-      for (var element in objeto.produtos!)
-      {a.add(InkWell(
+       return InkWell(
         onTap: (){
           abriDialog(context,objeto);
         },
@@ -31,23 +27,29 @@ List<Widget> corpoPedidos(BuildContext context, Pedidos objeto) {
                 ],
               ),
               Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Container(
-                      // color: Colors.red,
-                      width: _tamanho.larguraTela(context) * 0.23,
-                      height: _tamanho.alturaTela(context) * 0.05,
-                      child: AutoSizeText("Produtos: ${element.quantidadePedida} X  ${element.nomeProduto}", style: var_global.tamanhoPadraoTexto),
-                    ),
-                  ),
-                ],
+                children: [Column(children: listaProd(context,objeto),),],
               ),
             ],
           ),
         ),
-      ));}
+      );
    
-  return a;
+
   
+}
+
+listaProd(BuildContext context, Pedidos objeto){
+List<Widget> a = [];
+for (var element in objeto.produtos!) { 
+  a.add(Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: SizedBox(
+            // color: Colors.red,
+            width: _tamanho.larguraTela(context) * 0.23,
+            height: _tamanho.alturaTela(context) * 0.08,
+            child: AutoSizeText("${element.quantidadePedida} X  ${element.nomeProduto}", style: var_global.tamanhoPadraoTexto),
+                    ),
+                  ),);
+}
+return a;
 }

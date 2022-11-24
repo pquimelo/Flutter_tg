@@ -15,8 +15,9 @@ abriDialog(BuildContext context,Pedidos objeto) {
     style: ElevatedButton.styleFrom(primary: Colors.green),
     child: Text("Começar"),
     onPressed:  () {
+       
         var_global.listaComIndiceCerto.add(objeto);
-        PedidosProvider().criarCards();
+        PedidosProvider().criarCardsProdutos();
         Navigator.of(context).pop();
     },
   );
