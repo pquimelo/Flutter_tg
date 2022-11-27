@@ -4,10 +4,12 @@ library my_prj.var_global;
 
 import 'dart:async';
 
+import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tg/model/pedidos.dart';
 
 Completer<bool>? timerPedidos;
+ Completer<bool>? tempoPegarPedido;
 List<Pedidos> pedidosFila = [];
 List<Produtos> listaProdutos = [];
 TextStyle tamanhoPadraoTexto = TextStyle(
@@ -16,3 +18,6 @@ TextStyle tamanhoPadraoTexto = TextStyle(
 List<Pedidos> listaComIndiceCerto = [];
 List<Widget> a = [];
 List<Pedidos> listaIndice2 = [];
+
+List<DragAndDropList> listAlterada = [];
+bool primeiraVez = false;

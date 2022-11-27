@@ -1,3 +1,4 @@
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tg/component/alt_larg.dart';
@@ -8,14 +9,14 @@ import 'package:tg/provider/Pedidos_provider.dart';
 
 PedidosProvider pedidosProvider = PedidosProvider();
 
-Widget corpoReordenado(BuildContext context, Pedidos objeto,int index) {
+Widget corpoReordenado(BuildContext context, Pedidos objeto) {
   AltuLarg _tamanho = AltuLarg();
   
 
   
     
      return  Card(
- 
+      
       child: Column(
         children: [
       
@@ -45,7 +46,7 @@ Widget corpoReordenado(BuildContext context, Pedidos objeto,int index) {
           ),
         ],
       ),
-    );
+       );
     // }
     
   

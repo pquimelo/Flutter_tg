@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tg/component/periodo.dart';
 import 'package:tg/component/var_global.dart' as var_global;
 import 'package:tg/model/pedidos.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 class PedidosProvider extends ChangeNotifier {
   static final PedidosProvider _instance = PedidosProvider.internal();
@@ -13,29 +16,103 @@ class PedidosProvider extends ChangeNotifier {
   List get a => var_global.a;
   List get listaIndice2 => var_global.listaIndice2;
 
-  reordenarPedido() {
-    // listaPedidosProvider;
-    var_global.pedidosFila = [
-      Pedidos(
-        cpf: '44452014745',
-        idPedido: 5,
-        produtos: [
-          Produtos(idProduto: 2, nomeProduto: 'Lasanha', quantidadePedida: 15),
-          Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 2),
-        ],
-      ),
-      Pedidos(
-        cpf: '44452014745',
-        idPedido: 2,
-        produtos: [
-          Produtos(idProduto: 2, nomeProduto: 'strognoff', quantidadePedida: 1),
-          Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 3),
-        ],
-      ),
-    ];
+ 
 
+reordenarPedidosCerto(){
+  // var_global.listaIndice2 = [Pedidos(
+  //       cpf: '44452014745',
+  //       idPedido: 5,
+  //       produtos: [
+  //         Produtos(idProduto: 2, nomeProduto: 'Lasanha', quantidadePedida: 15),
+  //         Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 2),
+  //       ],
+  //     ),
+  //     Pedidos(
+  //       cpf: '44452014745',
+  //       idPedido: 2,
+  //       produtos: [
+  //         Produtos(idProduto: 2, nomeProduto: 'strognoff', quantidadePedida: 1),
+  //         Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 3),
+  //       ],
+  //     ),];
+
+// var_global.tempoPegarPedido = periodo(const Duration(seconds: 10), (cycle) async {
+
+
+//   var url = Uri.https('menuon-api.herokuapp.com', '/orders');
+
+//     var response = await http.get(url);
+    
+//     if (response.statusCode == 200) {
+//       List jsonResponse = convert.jsonDecode(response.body);
+    
+//       for (var element in jsonResponse) { 
+//       for (var produtos in (element['Products'] as List)) { 
+//               var_global.pedidosFila.add(Pedidos(
+//                  cpf: element['User']['cpf'],
+//                  dataInsercao: element['insertion_date'],
+//                  idPedido: element ['id_order'],
+//                  produtos:  [
+//                           Produtos(
+//                         idProduto: produtos['id_product'],
+//                         nomeProduto: produtos['name'],
+//                         quantidadePedida: produtos['sales']['quantity_sold'],
+//                           ),
+//                       ]
+//                 ),
+//               );
+            
+          
+            
+//           }
+        
+//     }
+// }
+
+// });
+notifyListeners();
+}
+
+
+pegarPedidos() async{
+  var url = Uri.https('menuon-api.herokuapp.com', '/orders');
+
+    var response = await http.get(url);
+    
+    if (response.statusCode == 200) {
+      List jsonResponse = convert.jsonDecode(response.body);
+    
+      for (var element in jsonResponse) { 
+      for (var produtos in (element['Products'] as List)) { 
+              var_global.listaIndice2.add(Pedidos(
+                 cpf: element['User']['cpf'],
+                 dataInsercao: element['insertion_date'],
+                 idPedido: element ['id_order'],
+                 produtos:  [
+                          Produtos(
+                        idProduto: produtos['id_product'],
+                        nomeProduto: produtos['name'],
+                        quantidadePedida: produtos['sales']['quantity_sold'],
+                          ),
+                      ]
+                ),
+              );
+            
+          
+            print('Funcionou');
+          }
+        
+    }}
     notifyListeners();
-  }
+}
+
+
+
+
+
+
+
+
 
   criarCards() {
     for (var element in var_global.listaComIndiceCerto) {

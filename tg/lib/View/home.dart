@@ -1,3 +1,4 @@
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tg/View/Pedidos/corpo_pedidos.dart';
@@ -5,6 +6,7 @@ import 'package:tg/View/lista_reordenada/lista_reordenada.dart';
 import 'package:tg/component/alt_larg.dart';
 import 'package:tg/component/var_global.dart' as var_global;
 import 'package:tg/controller/pedidos.dart';
+import 'package:tg/controller/pedidos_certos.dart';
 // import 'package:tg/controller/pedidos.dart';
 import 'package:tg/provider/Pedidos_provider.dart';
 // import 'package:tg/provider/lista_pedido.dart';
@@ -20,27 +22,46 @@ class Home extends StatefulWidget {
 AltuLarg _tamanho = AltuLarg();
 
 class _HomeState extends State<Home> {
+    late List<DragAndDropList> _contents;
+    
+
   @override
   void initState() {
-    PedidosProvider().reordenarPedido();
+    // PedidosProvider().reordenarPedidosCerto();
     
 
     super.initState();
+    
   }
 
   Future _reordenarPedidos() async {
+
     if (var_global.timerPedidos == null) {
       await reordenarPedidos();
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
+_contents = List.generate(context.watch<PedidosProvider>().listaIndice2.length, (index) {
+      return DragAndDropList(
+
+        children:[ 
+          //cria card so nao reordena
+          DragAndDropItem(child: corpoReordenado(context, context.watch<PedidosProvider>().listaIndice2[index]),), 
+          
+        ]
+      );
+    });
+
+
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // _reordenarPedidos();
-          PedidosProvider().criarCards();
+         PedidosProvider().pegarPedidos();
         },
       ),
       backgroundColor: const Color.fromARGB(255, 247, 247, 247),
@@ -130,13 +151,10 @@ class _HomeState extends State<Home> {
                       ),
                       width: _tamanho.larguraTela(context) * 0.4,
                       height: _tamanho.alturaTela(context) * 0.8,
-                      child: ListView.builder(
-                        itemCount: context.watch<PedidosProvider>().listaIndice2.length,
-                        itemBuilder: (context, index) {
-                          
-                          return  corpoReordenado(context, context.watch<PedidosProvider>().listaIndice2[index],index);
-                          
-                        },
+                      child: DragAndDropLists(
+                        onItemReorder: _onItemReorder,
+                        onListReorder: _onListReorder,
+                        children: _contents
                       ),
                     ),
                   ),
@@ -147,5 +165,20 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+  //TODO: FAZER MUDAR OS CARDS
+  _onItemReorder(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+    setState(() {
+      var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
+      _contents[newListIndex].children.insert(newItemIndex, movedItem);
+    });
+  }
+
+  _onListReorder(int oldListIndex, int newListIndex) {
+    setState(() {
+      var movedList = _contents.removeAt(oldListIndex);
+      _contents.insert(newListIndex, movedList);
+    });
   }
 }
