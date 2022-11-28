@@ -18,51 +18,49 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-
 AltuLarg _tamanho = AltuLarg();
 
 class _HomeState extends State<Home> {
-    late List<DragAndDropList> _contents;
-    
+  late List<DragAndDropList> _contents;
 
   @override
   void initState() {
     // PedidosProvider().reordenarPedidosCerto();
-    
 
     super.initState();
-    
   }
 
-  Future _reordenarPedidos() async {
-
-    if (var_global.timerPedidos == null) {
-      await reordenarPedidos();
-    }
-  }
-  
+  Future _reordenarPedidos() async {}
 
   @override
   Widget build(BuildContext context) {
-_contents = List.generate(context.watch<PedidosProvider>().listaIndice2.length, (index) {
-      return DragAndDropList(
-
-        children:[ 
-          //cria card so nao reordena
-          DragAndDropItem(child: corpoReordenado(context, context.watch<PedidosProvider>().listaIndice2[index]),), 
-          
-        ]
-      );
+    _contents = List.generate(context.watch<PedidosProvider>().listaIndice2.length, (index) {
+      return DragAndDropList(children: [
+        //cria card so nao reordena
+        DragAndDropItem(
+          child: corpoReordenado(context, context.watch<PedidosProvider>().listaIndice2[index]),
+        ),
+      ]);
     });
 
-
-
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // _reordenarPedidos();
-         PedidosProvider().pegarPedidos();
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () async {
+              // _reordenarPedidos();
+              await PedidosProvider().pegarPedidos();
+              // await PedidosProvider().reordenar();
+            },
+          ),
+          FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () async {
+              await PedidosProvider().reordenar();
+            },
+          ),
+        ],
       ),
       backgroundColor: const Color.fromARGB(255, 247, 247, 247),
       body: SafeArea(
@@ -131,8 +129,7 @@ _contents = List.generate(context.watch<PedidosProvider>().listaIndice2.length, 
                     child: ListView.builder(
                       itemCount: context.watch<PedidosProvider>().listaPedidosProvider.length,
                       itemBuilder: (context, index) {
-                        return 
-                             corpoPedidos(
+                        return corpoPedidos(
                           context,
                           context.watch<PedidosProvider>().listaPedidosProvider[index],
                         );
@@ -152,9 +149,9 @@ _contents = List.generate(context.watch<PedidosProvider>().listaIndice2.length, 
                       width: _tamanho.larguraTela(context) * 0.4,
                       height: _tamanho.alturaTela(context) * 0.8,
                       child: DragAndDropLists(
-                        onItemReorder: _onItemReorder,
+                        children: _contents,
                         onListReorder: _onListReorder,
-                        children: _contents
+                        onItemReorder: _onItemReorder,
                       ),
                     ),
                   ),
@@ -166,9 +163,9 @@ _contents = List.generate(context.watch<PedidosProvider>().listaIndice2.length, 
       ),
     );
   }
+
   //TODO: FAZER MUDAR OS CARDS
-  _onItemReorder(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
       _contents[newListIndex].children.insert(newItemIndex, movedItem);

@@ -26,6 +26,14 @@ class Produtos {
   int? quantidadePedida;
   int? statusProdutos;
   String? tempoPreparo;
+  int? prioridade;
 
-  Produtos({this.idProduto, this.nomeProduto, this.quantidadePedida, this.statusProdutos, this.tempoPreparo});
+  Produtos({
+    this.idProduto,
+    this.nomeProduto,
+    this.quantidadePedida,
+    this.statusProdutos,
+    this.tempoPreparo,
+    this.prioridade,
+  });
 }

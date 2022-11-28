@@ -12,107 +12,124 @@ class PedidosProvider extends ChangeNotifier {
 
   List get listaPedidosProvider => var_global.pedidosFila;
   List get listaComIndiceCerto => var_global.listaComIndiceCerto;
-  List get listaProdutos =>var_global.listaProdutos;
+  List get listaProdutos => var_global.listaProdutos;
   List get a => var_global.a;
   List get listaIndice2 => var_global.listaIndice2;
 
- 
-
-reordenarPedidosCerto(){
-  // var_global.listaIndice2 = [Pedidos(
-  //       cpf: '44452014745',
-  //       idPedido: 5,
-  //       produtos: [
-  //         Produtos(idProduto: 2, nomeProduto: 'Lasanha', quantidadePedida: 15),
-  //         Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 2),
-  //       ],
-  //     ),
-  //     Pedidos(
-  //       cpf: '44452014745',
-  //       idPedido: 2,
-  //       produtos: [
-  //         Produtos(idProduto: 2, nomeProduto: 'strognoff', quantidadePedida: 1),
-  //         Produtos(idProduto: 2, nomeProduto: 'Batata', quantidadePedida: 3),
-  //       ],
-  //     ),];
-
-// var_global.tempoPegarPedido = periodo(const Duration(seconds: 10), (cycle) async {
-
-
-//   var url = Uri.https('menuon-api.herokuapp.com', '/orders');
-
-//     var response = await http.get(url);
-    
-//     if (response.statusCode == 200) {
-//       List jsonResponse = convert.jsonDecode(response.body);
-    
-//       for (var element in jsonResponse) { 
-//       for (var produtos in (element['Products'] as List)) { 
-//               var_global.pedidosFila.add(Pedidos(
-//                  cpf: element['User']['cpf'],
-//                  dataInsercao: element['insertion_date'],
-//                  idPedido: element ['id_order'],
-//                  produtos:  [
-//                           Produtos(
-//                         idProduto: produtos['id_product'],
-//                         nomeProduto: produtos['name'],
-//                         quantidadePedida: produtos['sales']['quantity_sold'],
-//                           ),
-//                       ]
-//                 ),
-//               );
-            
-          
-            
-//           }
-        
-//     }
-// }
-
-// });
-notifyListeners();
-}
-
-
-pegarPedidos() async{
-  var url = Uri.https('menuon-api.herokuapp.com', '/orders');
+  pegarPedidos() async {
+    var url = Uri.https('menuon-api.herokuapp.com', '/orders');
 
     var response = await http.get(url);
-    
+
     if (response.statusCode == 200) {
       List jsonResponse = convert.jsonDecode(response.body);
-    
-      for (var element in jsonResponse) { 
-      for (var produtos in (element['Products'] as List)) { 
-              var_global.listaIndice2.add(Pedidos(
-                 cpf: element['User']['cpf'],
-                 dataInsercao: element['insertion_date'],
-                 idPedido: element ['id_order'],
-                 produtos:  [
-                          Produtos(
-                        idProduto: produtos['id_product'],
-                        nomeProduto: produtos['name'],
-                        quantidadePedida: produtos['sales']['quantity_sold'],
-                          ),
-                      ]
-                ),
-              );
-            
-          
-            print('Funcionou');
+
+      if (var_global.primeiraVez == true) {
+        for (var element in jsonResponse) {
+          for (var produtos in (element['Products'] as List)) {
+            var_global.listaIndice2.add(
+              Pedidos(
+                statusPedido: element['status'],
+                cpf: element['User']['cpf'],
+                dataInsercao: element['insertion_date'],
+                idPedido: element['id_order'],
+                produtos: [
+                  Produtos(
+                    idProduto: produtos['id_product'],
+                    tempoPreparo: produtos['preparation_time'],
+                    nomeProduto: produtos['name'],
+                    prioridade: produtos['priority'],
+                    quantidadePedida: produtos['sales']['quantity_sold'],
+                  )
+                ],
+              ),
+            );
           }
-        
-    }}
+        }
+        var_global.primeiraVez == false;
+      } else {
+        for (var lista in var_global.listaIndice2) {
+          for (var element in jsonResponse) {
+            for (var produtos in (element['Products'] as List)) {
+              if (lista.idPedido != element['id_order']) {
+                var_global.listaIndice2.add(
+                  Pedidos(
+                    statusPedido: element['status'],
+                    cpf: element['User']['cpf'],
+                    dataInsercao: element['insertion_date'],
+                    idPedido: element['id_order'],
+                    produtos: [
+                      Produtos(
+                        idProduto: produtos['id_product'],
+                        tempoPreparo: produtos['preparation_time'],
+                        nomeProduto: produtos['name'],
+                        prioridade: produtos['priority'],
+                        quantidadePedida: produtos['sales']['quantity_sold'],
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                print('ja existe');
+              }
+            }
+          }
+        }
+      }
+    }
+
     notifyListeners();
-}
+  }
 
+  reordenar() {
+    int index;
+    //TODO: ADICIONAR O PERIODO
+    var_global.tempoReordenacao = periodo(const Duration(seconds: 20), (cycle) async {
+      DateTime dataAtual = DateTime.now();
+      if (var_global.listaIndice2.isNotEmpty) {
+        for (var element in var_global.listaIndice2) {
+          for (var produtos in element.produtos!) {
+            switch (produtos.prioridade) {
+              case 0:
+                // index = var_global.listaIndice2.indexOf(element);
+                if (element.produtos![0].prioridade == 0) {
+                } else {
+                  index = 0;
+                  var_global.listaIndice2.remove(element);
+                  var_global.listaIndice2.insert(index, element);
+                }
 
+                //  TODO: ARRUMAR A DATA
+                // DateTime dataFormatada = DateTime.parse(element.dataInsercao!);
+                // Duration diferenca = dataFormatada.difference(dataAtual);
+                // int tempoPreparoInt = int.parse(produtos.tempoPreparo!);
+                // if (diferenca.inMinutes >= tempoPreparoInt) {
+                // var_global.listaIndice2.remove(element);
+                // }
 
-
-
-
-
-
+                notifyListeners();
+                break;
+              case 1:
+                // index = var_global.listaIndice2.indexOf(element);
+                index = 1;
+                var_global.listaIndice2.remove(element);
+                var_global.listaIndice2.insert(index, element);
+                notifyListeners();
+                break;
+              case 2:
+                // index = var_global.listaIndice2.indexOf(element);
+                index = 2;
+                var_global.listaIndice2.remove(element);
+                var_global.listaIndice2.insert(index, element);
+                notifyListeners();
+                break;
+              default:
+            }
+          }
+        }
+      }
+    });
+  }
 
   criarCards() {
     for (var element in var_global.listaComIndiceCerto) {
@@ -138,11 +155,12 @@ pegarPedidos() async{
     }
     notifyListeners();
   }
+
   criarCardsProdutos() {
     var_global.listaIndice2 = [];
-  for (var element in var_global.listaComIndiceCerto) {
-        for (var produtos in element.produtos!) {
-          for (int i = 0; i < produtos.quantidadePedida!; i++) {
+    for (var element in var_global.listaComIndiceCerto) {
+      for (var produtos in element.produtos!) {
+        for (int i = 0; i < produtos.quantidadePedida!; i++) {
           var_global.listaIndice2.add(
             Pedidos(
               produtos: [
@@ -156,19 +174,20 @@ pegarPedidos() async{
               ],
             ),
           );
-        }}
-         
+        }
+      }
     }
-   notifyListeners();
+    notifyListeners();
   }
 
   finalizarProduto(Pedidos objeto) {
-    objeto.produtos![0].statusProdutos = 1;
+    // objeto.produtos![0].statusProdutos = 1;
 
-    var_global.listaComIndiceCerto.remove(objeto);
+    var_global.listaIndice2.remove(objeto);
     notifyListeners();
   }
-  atualizar(){
-notifyListeners();
+
+  atualizar() {
+    notifyListeners();
   }
 }
