@@ -21,8 +21,6 @@ class Home extends StatefulWidget {
 AltuLarg _tamanho = AltuLarg();
 
 class _HomeState extends State<Home> {
-  late List<DragAndDropList> _contents;
-
   @override
   void initState() {
     // PedidosProvider().reordenarPedidosCerto();
@@ -34,15 +32,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    _contents = List.generate(context.watch<PedidosProvider>().listaIndice2.length, (index) {
-      return DragAndDropList(children: [
-        //cria card so nao reordena
-        DragAndDropItem(
-          child: corpoReordenado(context, context.watch<PedidosProvider>().listaIndice2[index]),
-        ),
-      ]);
-    });
-
     return Scaffold(
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -148,10 +137,11 @@ class _HomeState extends State<Home> {
                       ),
                       width: _tamanho.larguraTela(context) * 0.4,
                       height: _tamanho.alturaTela(context) * 0.8,
-                      child: DragAndDropLists(
-                        children: _contents,
-                        onListReorder: _onListReorder,
-                        onItemReorder: _onItemReorder,
+                      child: ListView.builder(
+                        itemCount: context.watch<PedidosProvider>().listaIndice2.length,
+                        itemBuilder: (context, index) {
+                          return corpoReordenado(context, context.watch<PedidosProvider>().listaIndice2[index]);
+                        },
                       ),
                     ),
                   ),
@@ -162,20 +152,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  //TODO: FAZER MUDAR OS CARDS
-  _onItemReorder(int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-    setState(() {
-      var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
-      _contents[newListIndex].children.insert(newItemIndex, movedItem);
-    });
-  }
-
-  _onListReorder(int oldListIndex, int newListIndex) {
-    setState(() {
-      var movedList = _contents.removeAt(oldListIndex);
-      _contents.insert(newListIndex, movedList);
-    });
   }
 }

@@ -4,6 +4,7 @@ import 'package:tg/component/var_global.dart' as var_global;
 import 'package:tg/model/pedidos.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:tg/model/super_classe.dart';
 
 class PedidosProvider extends ChangeNotifier {
   static final PedidosProvider _instance = PedidosProvider.internal();
@@ -23,58 +24,34 @@ class PedidosProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       List jsonResponse = convert.jsonDecode(response.body);
-
+      //TODO: O PROBLEMA ESTA SENDO COMO ADICIONAR NA LISTA 1 PEDIDO VARIOS PRODUTOS
       if (var_global.primeiraVez == true) {
         for (var element in jsonResponse) {
+          Pedidos pedido = Pedidos(
+            produtos: [],
+          );
+
+          pedido.statusPedido = element['status'];
+          pedido.cpf = element['User']['cpf'];
+          pedido.dataInsercao = element['insertion_date'];
+          pedido.idPedido = element['id_order'];
           for (var produtos in (element['Products'] as List)) {
-            var_global.listaIndice2.add(
-              Pedidos(
-                statusPedido: element['status'],
-                cpf: element['User']['cpf'],
-                dataInsercao: element['insertion_date'],
-                idPedido: element['id_order'],
-                produtos: [
-                  Produtos(
-                    idProduto: produtos['id_product'],
-                    tempoPreparo: produtos['preparation_time'],
-                    nomeProduto: produtos['name'],
-                    prioridade: produtos['priority'],
-                    quantidadePedida: produtos['sales']['quantity_sold'],
-                  )
-                ],
+            pedido.produtos?.add(
+              Produtos(
+                idProduto: produtos['id_product'],
+                tempoPreparo: produtos['preparation_time'],
+                nomeProduto: produtos['name'],
+                prioridade: produtos['priority'],
+                quantidadePedida: produtos['sales']['quantity_sold'],
               ),
             );
           }
+          var_global.pedidosFila.add(pedido);
         }
+
         var_global.primeiraVez == false;
       } else {
-        for (var lista in var_global.listaIndice2) {
-          for (var element in jsonResponse) {
-            for (var produtos in (element['Products'] as List)) {
-              if (lista.idPedido != element['id_order']) {
-                var_global.listaIndice2.add(
-                  Pedidos(
-                    statusPedido: element['status'],
-                    cpf: element['User']['cpf'],
-                    dataInsercao: element['insertion_date'],
-                    idPedido: element['id_order'],
-                    produtos: [
-                      Produtos(
-                        idProduto: produtos['id_product'],
-                        tempoPreparo: produtos['preparation_time'],
-                        nomeProduto: produtos['name'],
-                        prioridade: produtos['priority'],
-                        quantidadePedida: produtos['sales']['quantity_sold'],
-                      )
-                    ],
-                  ),
-                );
-              } else {
-                print('ja existe');
-              }
-            }
-          }
-        }
+        //TODO: FAZER PASSAR AQUI UMA VEZ SO
       }
     }
 
@@ -88,46 +65,46 @@ class PedidosProvider extends ChangeNotifier {
       DateTime dataAtual = DateTime.now();
       if (var_global.listaIndice2.isNotEmpty) {
         for (var element in var_global.listaIndice2) {
-          for (var produtos in element.produtos!) {
-            switch (produtos.prioridade) {
-              case 0:
-                // index = var_global.listaIndice2.indexOf(element);
-                if (element.produtos![0].prioridade == 0) {
-                } else {
-                  index = 0;
-                  var_global.listaIndice2.remove(element);
-                  var_global.listaIndice2.insert(index, element);
-                }
+          // for (var produtos in element.produtos!) {
+          // switch (produtos.prioridade) {
+          //   case 0:
+          //     // index = var_global.listaIndice2.indexOf(element);
+          //     if (element.produtos![0].prioridade == 0) {
+          //     } else {
+          //       index = 0;
+          //       var_global.listaIndice2.remove(element);
+          //       var_global.listaIndice2.insert(index, element);
+          //     }
 
-                //  TODO: ARRUMAR A DATA
-                // DateTime dataFormatada = DateTime.parse(element.dataInsercao!);
-                // Duration diferenca = dataFormatada.difference(dataAtual);
-                // int tempoPreparoInt = int.parse(produtos.tempoPreparo!);
-                // if (diferenca.inMinutes >= tempoPreparoInt) {
-                // var_global.listaIndice2.remove(element);
-                // }
+          //     //  TODO: ARRUMAR A DATA
+          //     // DateTime dataFormatada = DateTime.parse(element.dataInsercao!);
+          //     // Duration diferenca = dataFormatada.difference(dataAtual);
+          //     // int tempoPreparoInt = int.parse(produtos.tempoPreparo!);
+          //     // if (diferenca.inMinutes >= tempoPreparoInt) {
+          //     // var_global.listaIndice2.remove(element);
+          //     // }
 
-                notifyListeners();
-                break;
-              case 1:
-                // index = var_global.listaIndice2.indexOf(element);
-                index = 1;
-                var_global.listaIndice2.remove(element);
-                var_global.listaIndice2.insert(index, element);
-                notifyListeners();
-                break;
-              case 2:
-                // index = var_global.listaIndice2.indexOf(element);
-                index = 2;
-                var_global.listaIndice2.remove(element);
-                var_global.listaIndice2.insert(index, element);
-                notifyListeners();
-                break;
-              default:
-            }
-          }
+          //     notifyListeners();
+          //     break;
+          //   case 1:
+          //     // index = var_global.listaIndice2.indexOf(element);
+          //     index = 1;
+          //     var_global.listaIndice2.remove(element);
+          //     var_global.listaIndice2.insert(index, element);
+          //     notifyListeners();
+          //     break;
+          //   case 2:
+          //     // index = var_global.listaIndice2.indexOf(element);
+          //     index = 2;
+          //     var_global.listaIndice2.remove(element);
+          //     var_global.listaIndice2.insert(index, element);
+          //     notifyListeners();
+          //     break;
+          //   default:
+          // }
         }
       }
+      // }
     });
   }
 
@@ -157,30 +134,29 @@ class PedidosProvider extends ChangeNotifier {
   }
 
   criarCardsProdutos() {
-    var_global.listaIndice2 = [];
-    for (var element in var_global.listaComIndiceCerto) {
-      for (var produtos in element.produtos!) {
-        for (int i = 0; i < produtos.quantidadePedida!; i++) {
-          var_global.listaIndice2.add(
-            Pedidos(
-              produtos: [
-                Produtos(
-                  idProduto: produtos.idProduto,
-                  nomeProduto: produtos.nomeProduto,
-                  // quantidadePedida: produtos.quantidadePedida
-                  tempoPreparo: produtos.tempoPreparo,
-                  statusProdutos: 0,
-                ),
-              ],
-            ),
-          );
-        }
-      }
-    }
+    // for (var element in var_global.listaIndice2) {
+
+    //     for (int i = 0; i < element.quantidadePedidaProduto!; i++) {
+    //       var_global.listaIndice2.add(
+    //         Pedidos(
+    //           produtos: [
+    //             Produtos(
+    //               idProduto: produtos.idProduto,
+    //               nomeProduto: produtos.nomeProduto,
+    //               // quantidadePedida: produtos.quantidadePedida
+    //               tempoPreparo: produtos.tempoPreparo,
+    //               statusProdutos: 0,
+    //             ),
+    //           ],
+    //         ),
+    //       );
+    //     }
+
+    // }
     notifyListeners();
   }
 
-  finalizarProduto(Pedidos objeto) {
+  finalizarProduto(SuperProdutos objeto) {
     // objeto.produtos![0].statusProdutos = 1;
 
     var_global.listaIndice2.remove(objeto);
