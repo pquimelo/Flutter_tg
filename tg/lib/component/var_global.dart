@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tg/model/pedidos.dart';
+import 'package:tg/model/super_classe.dart';
 
 Completer<bool>? tempoPegarPedido;
 Completer<bool>? tempoReordenacao;
@@ -17,7 +18,7 @@ TextStyle tamanhoPadraoTexto = TextStyle(
 );
 List<Pedidos> listaComIndiceCerto = [];
 List<Widget> a = [];
-List<Pedidos> listaIndice2 = [];
+List<SuperProdutos> listaIndice2 = [];
 
 List<DragAndDropList> listAlterada = [];
 bool primeiraVez = true;

@@ -1,24 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:tg/View/lista_reordenada/lista_reordenada.dart';
 import 'package:tg/model/pedidos.dart';
-import'package:tg/component/var_global.dart' as var_global;
+import 'package:tg/component/var_global.dart' as var_global;
+import 'package:tg/model/super_classe.dart';
 import 'package:tg/provider/Pedidos_provider.dart';
-abriDialog(BuildContext context,Pedidos objeto) {
-   Widget cancelaButton = ElevatedButton(
-    
+
+abriDialog(BuildContext context, Pedidos objeto) {
+  Widget cancelaButton = ElevatedButton(
     style: ElevatedButton.styleFrom(primary: Colors.red),
     child: Text("Fechar"),
-    onPressed:  () {
+    onPressed: () {
       Navigator.of(context).pop();
     },
   );
   Widget continuaButton = ElevatedButton(
-    style: ElevatedButton.styleFrom(primary: Colors.green),
-    child: Text("Começar"),
-    onPressed:  () {
-       
-        var_global.listaComIndiceCerto.add(objeto);
-        PedidosProvider().criarCardsProdutos();
-        Navigator.of(context).pop();
+    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+    child: const Text("Começar"),
+    onPressed: () {
+      for (var element in objeto.produtos!) {
+        for (int i = 0; i < element.quantidadePedida!; i++) {
+          var_global.listaIndice2.add(
+            SuperProdutos(
+              cpfCliente: objeto.cpf,
+              dataInsercaoPedido: objeto.dataInsercao,
+              idPedidoCliente: objeto.idPedido,
+              idProduto: element.idProduto,
+              nomeProduto: element.nomeProduto,
+              prioridade: element.prioridade,
+              quantidadePedidaProduto: element.quantidadePedida,
+              nomeDoCliente: objeto.nomeCliente,
+            ),
+          );
+        }
+      }
+      PedidosProvider().atualizar();
+      // PedidosProvider().criarCardsProdutos(objeto);
+      Navigator.of(context).pop();
     },
   );
   //configura o AlertDialog

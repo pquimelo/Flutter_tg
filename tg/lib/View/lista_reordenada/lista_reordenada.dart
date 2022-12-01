@@ -1,14 +1,14 @@
-import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tg/component/alt_larg.dart';
-import 'package:tg/model/pedidos.dart';
+
 import 'package:tg/component/var_global.dart' as var_global;
+import 'package:tg/model/super_classe.dart';
 import 'package:tg/provider/Pedidos_provider.dart';
 
 PedidosProvider pedidosProvider = PedidosProvider();
 
-Widget corpoReordenado(BuildContext context, Pedidos objeto) {
+Widget corpoReordenado(BuildContext context, SuperProdutos objeto) {
   AltuLarg _tamanho = AltuLarg();
 
   return Card(
@@ -22,7 +22,7 @@ Widget corpoReordenado(BuildContext context, Pedidos objeto) {
                 // color: Colors.red,
                 width: _tamanho.larguraTela(context) * 0.23,
                 height: _tamanho.alturaTela(context) * 0.05,
-                child: Text("Produto: ${objeto.produtos!.last.nomeProduto}", style: var_global.tamanhoPadraoTexto),
+                child: Text("Produto: ${objeto.nomeProduto}", style: var_global.tamanhoPadraoTexto),
               ),
             ),
             Container(
