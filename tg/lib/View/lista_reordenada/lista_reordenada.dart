@@ -12,17 +12,29 @@ Widget corpoReordenado(BuildContext context, SuperProdutos objeto) {
   AltuLarg _tamanho = AltuLarg();
 
   return Card(
+    shadowColor: Colors.yellow,
+    elevation: 3,
     child: Column(
       children: [
         Row(
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 10),
-              child: Container(
-                // color: Colors.red,
-                width: _tamanho.larguraTela(context) * 0.23,
-                height: _tamanho.alturaTela(context) * 0.05,
-                child: Text("Produto: ${objeto.nomeProduto}", style: var_global.tamanhoPadraoTexto),
+              child: Column(
+                children: [
+                  Container(
+                    // color: Colors.red,
+                    width: _tamanho.larguraTela(context) * 0.23,
+                    height: _tamanho.alturaTela(context) * 0.05,
+                    child: Text("Nº Pedido: ${objeto.idPedidoCliente}", style: var_global.tamanhoPadraoTexto),
+                  ),
+                  Container(
+                    // color: Colors.red,
+                    width: _tamanho.larguraTela(context) * 0.23,
+                    height: _tamanho.alturaTela(context) * 0.05,
+                    child: Text("Produto: ${objeto.nomeProduto}", style: var_global.tamanhoPadraoTexto),
+                  ),
+                ],
               ),
             ),
             Container(

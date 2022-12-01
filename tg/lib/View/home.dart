@@ -9,6 +9,7 @@ import 'package:tg/controller/pedidos.dart';
 import 'package:tg/controller/pedidos_certos.dart';
 // import 'package:tg/controller/pedidos.dart';
 import 'package:tg/provider/Pedidos_provider.dart';
+import 'package:tg/provider/iniciar/iniciar.dart';
 // import 'package:tg/provider/lista_pedido.dart';
 
 class Home extends StatefulWidget {
@@ -37,16 +38,17 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            child: context.watch<IniciarProvider>().inciouOperacao == false
+                ? Icon(
+                    Icons.play_arrow_outlined,
+                    size: _tamanho.larguraTela(context) * 0.05,
+                  )
+                : Icon(
+                    Icons.pause,
+                    size: _tamanho.larguraTela(context) * 0.05,
+                  ),
             onPressed: () async {
-              // _reordenarPedidos();
-              await PedidosProvider().pegarPedidos();
-              // await PedidosProvider().reordenar();
-            },
-          ),
-          FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () async {
-              await PedidosProvider().reordenar();
+              await IniciarProvider().iniciarOperacao();
             },
           ),
         ],

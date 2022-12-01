@@ -19,41 +19,42 @@ class PedidosProvider extends ChangeNotifier {
 
   pegarPedidos() async {
     var url = Uri.https('menuon-api.herokuapp.com', '/orders');
+    var_global.tempoPegarPedido = periodo(const Duration(minutes: 1), (cycle) async {
+      var response = await http.get(url);
 
-    var response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      List jsonResponse = convert.jsonDecode(response.body);
-      //TODO: O PROBLEMA ESTA SENDO COMO ADICIONAR NA LISTA 1 PEDIDO VARIOS PRODUTOS
-      if (var_global.primeiraVez == true) {
-        for (var element in jsonResponse) {
-          Pedidos pedido = Pedidos(
-            produtos: [],
-          );
-
-          pedido.statusPedido = element['status'];
-          pedido.cpf = element['User']['cpf'];
-          pedido.dataInsercao = element['insertion_date'];
-          pedido.idPedido = element['id_order'];
-          for (var produtos in (element['Products'] as List)) {
-            pedido.produtos?.add(
-              Produtos(
-                idProduto: produtos['id_product'],
-                tempoPreparo: produtos['preparation_time'],
-                nomeProduto: produtos['name'],
-                prioridade: produtos['priority'],
-                quantidadePedida: produtos['sales']['quantity_sold'],
-              ),
+      if (response.statusCode == 200) {
+        List jsonResponse = convert.jsonDecode(response.body);
+        //TODO: O PROBLEMA ESTA SENDO COMO ADICIONAR NA LISTA 1 PEDIDO VARIOS PRODUTOS
+        if (var_global.primeiraVez == true) {
+          for (var element in jsonResponse) {
+            Pedidos pedido = Pedidos(
+              produtos: [],
             );
-          }
-          var_global.pedidosFila.add(pedido);
-        }
 
-        var_global.primeiraVez == false;
-      } else {
-        //TODO: FAZER PASSAR AQUI UMA VEZ SO
+            pedido.statusPedido = element['status'];
+            pedido.cpf = element['User']['cpf'];
+            pedido.dataInsercao = element['insertion_date'];
+            pedido.idPedido = element['id_order'];
+            for (var produtos in (element['Products'] as List)) {
+              pedido.produtos?.add(
+                Produtos(
+                  idProduto: produtos['id_product'],
+                  tempoPreparo: produtos['preparation_time'],
+                  nomeProduto: produtos['name'],
+                  prioridade: produtos['priority'],
+                  quantidadePedida: produtos['sales']['quantity_sold'],
+                ),
+              );
+            }
+            var_global.pedidosFila.add(pedido);
+          }
+
+          var_global.primeiraVez == false;
+        } else {
+          //TODO: FAZER PASSAR AQUI UMA VEZ SO
+        }
       }
-    }
+    });
 
     notifyListeners();
   }
@@ -61,50 +62,39 @@ class PedidosProvider extends ChangeNotifier {
   reordenar() {
     int index;
     //TODO: ADICIONAR O PERIODO
-    var_global.tempoReordenacao = periodo(const Duration(seconds: 20), (cycle) async {
-      DateTime dataAtual = DateTime.now();
+    var_global.tempoReordenacao = periodo(const Duration(seconds: 30), (cycle) async {
       if (var_global.listaIndice2.isNotEmpty) {
         for (var element in var_global.listaIndice2) {
-          // for (var produtos in element.produtos!) {
-          // switch (produtos.prioridade) {
-          //   case 0:
-          //     // index = var_global.listaIndice2.indexOf(element);
-          //     if (element.produtos![0].prioridade == 0) {
-          //     } else {
-          //       index = 0;
-          //       var_global.listaIndice2.remove(element);
-          //       var_global.listaIndice2.insert(index, element);
-          //     }
-
-          //     //  TODO: ARRUMAR A DATA
-          //     // DateTime dataFormatada = DateTime.parse(element.dataInsercao!);
-          //     // Duration diferenca = dataFormatada.difference(dataAtual);
-          //     // int tempoPreparoInt = int.parse(produtos.tempoPreparo!);
-          //     // if (diferenca.inMinutes >= tempoPreparoInt) {
-          //     // var_global.listaIndice2.remove(element);
-          //     // }
-
-          //     notifyListeners();
-          //     break;
-          //   case 1:
-          //     // index = var_global.listaIndice2.indexOf(element);
-          //     index = 1;
-          //     var_global.listaIndice2.remove(element);
-          //     var_global.listaIndice2.insert(index, element);
-          //     notifyListeners();
-          //     break;
-          //   case 2:
-          //     // index = var_global.listaIndice2.indexOf(element);
-          //     index = 2;
-          //     var_global.listaIndice2.remove(element);
-          //     var_global.listaIndice2.insert(index, element);
-          //     notifyListeners();
-          //     break;
-          //   default:
-          // }
+          switch (element.prioridade) {
+            case 0:
+              // index = var_global.listaIndice2.indexOf(element);
+              if (var_global.listaIndice2[0].prioridade != 0) {
+                index = 0;
+                var_global.listaIndice2.remove(element);
+                var_global.listaIndice2.insert(index, element);
+              } else {}
+              notifyListeners();
+              break;
+            case 1:
+              if (var_global.listaIndice2[0].prioridade != 0 || var_global.listaIndice2[0].prioridade == 1) {
+                index = 0;
+                var_global.listaIndice2.remove(element);
+                var_global.listaIndice2.insert(index, element);
+              } else {}
+              notifyListeners();
+              break;
+            case 2:
+              if (var_global.listaIndice2[0].prioridade != 0 || var_global.listaIndice2[0].prioridade != 1 || var_global.listaIndice2[0].prioridade == 2) {
+                index = 0;
+                var_global.listaIndice2.remove(element);
+                var_global.listaIndice2.insert(index, element);
+              } else {}
+              notifyListeners();
+              break;
+            default:
+          }
         }
       }
-      // }
     });
   }
 

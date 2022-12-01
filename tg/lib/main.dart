@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tg/View/home.dart';
 import 'package:tg/provider/Pedidos_provider.dart';
-
+import 'package:tg/provider/iniciar/iniciar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +12,7 @@ void main() {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => PedidosProvider()),
+          ChangeNotifierProvider(create: (_) => IniciarProvider()),
         ],
         child: const MyApp(),
       ),

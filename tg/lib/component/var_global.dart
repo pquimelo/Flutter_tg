@@ -22,3 +22,4 @@ List<SuperProdutos> listaIndice2 = [];
 
 List<DragAndDropList> listAlterada = [];
 bool primeiraVez = true;
+bool iniciouOperacao = false;
