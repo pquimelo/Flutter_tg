@@ -12,7 +12,8 @@ Widget corpoReordenado(BuildContext context, SuperProdutos objeto) {
   AltuLarg _tamanho = AltuLarg();
 
   return Card(
-    shadowColor: Colors.yellow,
+    color: Colors.amber.shade50,
+    shadowColor: Colors.black,
     elevation: 3,
     child: Column(
       children: [
@@ -37,15 +38,21 @@ Widget corpoReordenado(BuildContext context, SuperProdutos objeto) {
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(bottom: 5),
-              height: _tamanho.alturaTela(context) * 0.09,
-              child: ElevatedButton(
-                onPressed: () async {
-                  // Passar o objeto interiro
-                  await PedidosProvider().finalizarProduto(objeto);
-                },
-                child: Text('Finalizar', style: var_global.tamanhoPadraoTexto),
+            Center(
+              child: Container(
+                // padding: const EdgeInsets.only(bottom: 5),
+                height: _tamanho.alturaTela(context) * 0.09,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    backgroundColor: Colors.green.shade400,
+                  ),
+                  onPressed: () async {
+                    // Passar o objeto interiro
+                    await PedidosProvider().finalizarProduto(objeto);
+                  },
+                  child: Text('Finalizar', style: var_global.tamanhoPadraoTexto),
+                ),
               ),
             ),
           ],

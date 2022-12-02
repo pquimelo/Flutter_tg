@@ -11,6 +11,9 @@ class IniciarProvider extends ChangeNotifier {
 }
 
 Future pausarOperacao() async {
+  var_global.tempoPegarPedido!.complete(true);
+  var_global.tempoReordenacao!.complete(true);
+  await PedidosProvider().atualizar();
   var_global.iniciouOperacao = false;
 }
 

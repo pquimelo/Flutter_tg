@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
           FloatingActionButton(
             backgroundColor: context.watch<IniciarProvider>().inciouOperacao ? Colors.red : Colors.green,
             child: Icon(
-              context.watch<IniciarProvider>().inciouOperacao ? Icons.pause : Icons.play_arrow_outlined,
+              context.watch<IniciarProvider>().inciouOperacao ? Icons.pause : Icons.play_arrow_rounded,
               size: _tamanho.larguraTela(context) * 0.05,
             ),
             onPressed: () async {
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      backgroundColor: const Color.fromARGB(255, 247, 247, 247),
+      backgroundColor: Colors.blueGrey,
       body: SafeArea(
         child: Column(
           children: [
@@ -74,6 +74,7 @@ class _HomeState extends State<Home> {
                           child: Text(
                             'Pedidos para preparar ',
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 25,
                             ),
                           ),
@@ -90,6 +91,7 @@ class _HomeState extends State<Home> {
                           child: Text(
                             'Pedidos em preparação ',
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 25,
                             ),
                           ),
@@ -109,7 +111,7 @@ class _HomeState extends State<Home> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
                       border: Border.all(
-                        color: const Color.fromARGB(255, 222, 54, 251),
+                        color: Colors.white,
                       ),
                     ),
                     width: _tamanho.larguraTela(context) * 0.4,
@@ -131,7 +133,7 @@ class _HomeState extends State<Home> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
                         border: Border.all(
-                          color: const Color.fromARGB(255, 222, 54, 251),
+                          color: Colors.white,
                         ),
                       ),
                       width: _tamanho.larguraTela(context) * 0.4,
