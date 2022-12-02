@@ -9,6 +9,7 @@ import 'package:tg/controller/pedidos.dart';
 import 'package:tg/controller/pedidos_certos.dart';
 // import 'package:tg/controller/pedidos.dart';
 import 'package:tg/provider/Pedidos_provider.dart';
+import 'package:tg/provider/iniciar/controlar.dart';
 import 'package:tg/provider/iniciar/iniciar.dart';
 // import 'package:tg/provider/lista_pedido.dart';
 
@@ -38,17 +39,13 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            child: context.watch<IniciarProvider>().inciouOperacao == false
-                ? Icon(
-                    Icons.play_arrow_outlined,
-                    size: _tamanho.larguraTela(context) * 0.05,
-                  )
-                : Icon(
-                    Icons.pause,
-                    size: _tamanho.larguraTela(context) * 0.05,
-                  ),
+            backgroundColor: context.watch<IniciarProvider>().inciouOperacao ? Colors.red : Colors.green,
+            child: Icon(
+              context.watch<IniciarProvider>().inciouOperacao ? Icons.pause : Icons.play_arrow_outlined,
+              size: _tamanho.larguraTela(context) * 0.05,
+            ),
             onPressed: () async {
-              await IniciarProvider().iniciarOperacao();
+              await controlarOperacao();
             },
           ),
         ],

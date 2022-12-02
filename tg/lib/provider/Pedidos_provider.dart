@@ -47,15 +47,16 @@ class PedidosProvider extends ChangeNotifier {
               );
             }
             var_global.pedidosFila.add(pedido);
+            notifyListeners();
           }
-
+          notifyListeners();
           var_global.primeiraVez == false;
         } else {
           //TODO: FAZER PASSAR AQUI UMA VEZ SO
         }
       }
     });
-
+    var_global.pedidosFila;
     notifyListeners();
   }
 

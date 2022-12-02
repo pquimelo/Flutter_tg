@@ -8,16 +8,15 @@ class IniciarProvider extends ChangeNotifier {
   IniciarProvider.internal();
 
   bool get inciouOperacao => var_global.iniciouOperacao;
+}
 
-  controlarOperacao() async {}
+Future pausarOperacao() async {
+  var_global.iniciouOperacao = false;
+}
 
-  iniciarOperacao() async {
-    await PedidosProvider().pegarPedidos();
-    await PedidosProvider().reordenar();
-    notifyListeners();
-  }
-
-  pausarOperacao() {
-    notifyListeners();
-  }
+Future iniciarOperacao() async {
+  await PedidosProvider().pegarPedidos();
+  await PedidosProvider().reordenar();
+  await PedidosProvider().atualizar(); //TODO: AQUI NAO ESTA ATUALIZANDO O NOTIFI LISTENER
+  var_global.iniciouOperacao = true;
 }

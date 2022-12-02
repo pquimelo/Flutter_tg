@@ -17,6 +17,7 @@ abriDialog(BuildContext context, Pedidos objeto) {
     style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
     child: const Text("Começar"),
     onPressed: () {
+      var_global.pedidosFila.remove(objeto);
       for (var element in objeto.produtos!) {
         for (int i = 0; i < element.quantidadePedida!; i++) {
           var_global.listaIndice2.add(
