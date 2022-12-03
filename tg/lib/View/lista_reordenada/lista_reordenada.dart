@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tap_debouncer/tap_debouncer.dart';
 
 import 'package:tg/component/alt_larg.dart';
 
@@ -42,16 +43,21 @@ Widget corpoReordenado(BuildContext context, SuperProdutos objeto) {
               child: Container(
                 // padding: const EdgeInsets.only(bottom: 5),
                 height: _tamanho.alturaTela(context) * 0.09,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    backgroundColor: Colors.green.shade400,
-                  ),
-                  onPressed: () async {
-                    // Passar o objeto interiro
-                    await PedidosProvider().finalizarProduto(objeto);
+                child: TapDebouncer(
+                  cooldown: const Duration(milliseconds: 500),
+                  builder: (context, onTap) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        backgroundColor: Colors.green.shade400,
+                      ),
+                      onPressed: () async {
+                        // Passar o objeto interiro
+                        await PedidosProvider().finalizarProduto(objeto);
+                      },
+                      child: Text('Finalizar', style: var_global.tamanhoPadraoTexto),
+                    );
                   },
-                  child: Text('Finalizar', style: var_global.tamanhoPadraoTexto),
                 ),
               ),
             ),
