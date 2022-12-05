@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:tg/component/periodo.dart';
 import 'package:tg/component/var_global.dart' as var_global;
@@ -18,14 +19,14 @@ class PedidosProvider extends ChangeNotifier {
   List get listaIndice2 => var_global.listaIndice2;
 
   pegarPedidos() async {
+    bool passouAqui = false;
     var url = Uri.https('menuon-api.herokuapp.com', '/orders');
     var_global.tempoPegarPedido = periodo(const Duration(minutes: 1), (cycle) async {
       var response = await http.get(url);
 
-      if (response.statusCode == 200) {
-        List jsonResponse = convert.jsonDecode(response.body);
-        //TODO: O PROBLEMA ESTA SENDO COMO ADICIONAR NA LISTA 1 PEDIDO VARIOS PRODUTOS
-        if (var_global.primeiraVez == true) {
+      List jsonResponse = convert.jsonDecode(response.body);
+      if (passouAqui == false) {
+        if (response.statusCode == 200) {
           for (var element in jsonResponse) {
             Pedidos pedido = Pedidos(
               produtos: [],
@@ -52,7 +53,52 @@ class PedidosProvider extends ChangeNotifier {
           notifyListeners();
           var_global.primeiraVez == false;
         } else {
-          //TODO: FAZER PASSAR AQUI UMA VEZ SO
+          final snackBar = SnackBar(
+            /// need to set following properties for best effect of awesome_snackbar_content
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
+              title: 'Error!',
+              message: 'Problemas com a internet!',
+
+              /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+              contentType: ContentType.failure,
+            ),
+          );
+        }
+        passouAqui = true;
+      } else {
+        for (var json in jsonResponse) {
+          //TODO: GAMBIARRA VER COM OS MENINOS
+          for (var element in var_global.pedidosFila) {
+            if (!var_global.pedidosFila.contains(element)) {
+              Pedidos pedido = Pedidos(
+                produtos: [],
+              );
+
+              pedido.statusPedido = json['status'];
+              pedido.cpf = json['User']['cpf'];
+              pedido.dataInsercao = json['insertion_date'];
+              pedido.idPedido = json['id_order'];
+              for (var produtos in (json['Products'] as List)) {
+                pedido.produtos?.add(
+                  Produtos(
+                    idProduto: produtos['id_product'],
+                    tempoPreparo: produtos['preparation_time'],
+                    nomeProduto: produtos['name'],
+                    prioridade: produtos['priority'],
+                    quantidadePedida: produtos['sales']['quantity_sold'],
+                  ),
+                );
+              }
+              var_global.pedidosFila.add(pedido);
+              notifyListeners();
+            } else {
+              //se for igualq
+              print('Funcionou');
+            }
+          }
         }
       }
     });
@@ -62,13 +108,12 @@ class PedidosProvider extends ChangeNotifier {
 
   reordenar() {
     int index;
-    //TODO: ADICIONAR O PERIODO
+
     var_global.tempoReordenacao = periodo(const Duration(seconds: 30), (cycle) async {
       if (var_global.listaIndice2.isNotEmpty) {
         for (var element in var_global.listaIndice2) {
           switch (element.prioridade) {
             case 0:
-              // index = var_global.listaIndice2.indexOf(element);
               if (var_global.listaIndice2[0].prioridade != 0) {
                 index = 0;
                 var_global.listaIndice2.remove(element);
